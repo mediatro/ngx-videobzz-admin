@@ -1,0 +1,52 @@
+<form [formGroup]="formGroup">
+  <h3>Filter By</h3>
+  <mat-divider></mat-divider>
+
+  <h4>Date</h4>
+  <div fxLayout="column">
+    <mat-form-field>
+      <mat-label>From</mat-label>
+      <input matInput [matDatepicker]="pickerFrom">
+      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>To</mat-label>
+      <input matInput [matDatepicker]="pickerTo">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <mat-divider></mat-divider>
+
+  <h4>Quality</h4>
+  <div fxLayout="column">
+    <mat-checkbox *ngFor="let choice of qualityChoices"
+                  formControlName="quality"
+    >
+      {{choice}}
+    </mat-checkbox>
+  </div>
+  <mat-divider></mat-divider>
+
+  <h4>Popularity</h4>
+  <div fxLayout="column">
+    <mat-checkbox *ngFor="let choice of popularityChoices"
+                  formControlName="popularity"
+    >
+      {{choice}}
+    </mat-checkbox>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div fxLayout="column">
+    <app-filter-choice label="Category" [allItems]="allCategories" (onChange)="handleCategoryChange($event)"></app-filter-choice>
+    <app-filter-choice label="SubCategory" [allItems]="allSubCategories"></app-filter-choice>
+    <app-filter-choice label="Creative Methods"></app-filter-choice>
+    <app-filter-choice label="Language" [allItems]="allLanguages"></app-filter-choice>
+    <app-filter-choice label="Environment"></app-filter-choice>
+    <app-filter-choice label="Value Symbols"></app-filter-choice>
+    <app-filter-choice label="Soundtrack"></app-filter-choice>
+  </div>
+</form>
