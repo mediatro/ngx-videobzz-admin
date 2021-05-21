@@ -1,36 +1,26 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChild,
+  Inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {RestApi} from "../../../services/rest-api";
+import {Album, RestApi} from "../../../services/rest-api";
 import {MatPaginator} from "@angular/material/paginator";
-import {merge, Observable} from "rxjs";
+import {merge, Observable, Subject} from "rxjs";
 import {map, startWith, switchMap} from "rxjs/operators";
-import {FormBuilder} from "@angular/forms";
 import {SelectionModel} from "@angular/cdk/collections";
+import {PageEvent} from "@angular/material/paginator/paginator";
+import {AssetModel, ExtraColumn} from "../assets-datagrid/assets-datagrid.component";
+import {MatSidenav} from "@angular/material/sidenav/sidenav";
 
-export type AlbumModel = {
-  name: string;
-  assets: any[];
-}
-
-export type AssetModel = {
-  id: number,
-  thumbnail: string;
-  name: string;
+type AlbumAssetModel = AssetModel & Album & {
   contributor: string;
-  album?: AlbumModel;
-  uploadDate: Date;
-  shareCount: number;
-  downloadCount: number;
-  linkCount: number;
-  play: {
-    count: number,
-    url: string,
-  };
 }
-
-const MOCK_ASSETS: AssetModel[] = [
-  {id: 1, album: {name: 'Window tutorials', assets: [0,0,0,0,0,0,0,0]}, thumbnail: 'thumb', name: 'Window beginer 1', contributor: 'Ron Amano', uploadDate: new Date(), shareCount: 220, downloadCount: 350, linkCount: 129, play: {count: 3754, url: ''}},
-];
 
 @Component({
   selector: 'app-contributor-assets',
@@ -39,29 +29,18 @@ const MOCK_ASSETS: AssetModel[] = [
 })
 export class ContributorAssetsComponent implements OnInit, AfterViewInit {
 
-  dataSource = new MatTableDataSource<AssetModel>([]);
+  dataSource = new MatTableDataSource<AlbumAssetModel>([]);
+  selection = new SelectionModel<AlbumAssetModel>(true, []);
   resultsLength = 0;
 
-  displayedColumns: string[] = [
-    'id',
-    'thumbnail',
-    'name',
-    'contributor',
-    'album',
-    'uploadDate',
-    'shareCount',
-    'downloadCount',
-    'linkCount',
-    'play',
-    'settings',
-    'delete',
-    'reorder',
-  ];
+  beforeDisplayedColumns = ['contributor','album'];
+  afterDisplayedColumns = ['settings'];
 
-  selection = new SelectionModel<AssetModel>(true, []);
-  dragEnabled = false;
+  onPageChange = new Subject<PageEvent>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('snav') snav!: MatSidenav;
+
+
 
   constructor(
     @Inject('admin.api.service') private api: RestApi,
@@ -72,17 +51,13 @@ export class ContributorAssetsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    merge(this.paginator.page).pipe(
-      startWith({}),
-      switchMap(() => this.api.getVideos$(this.paginator.pageIndex+1)),
+    this.onPageChange.pipe(
+      startWith({pageIndex: 0}),
+      switchMap((value) => this.api.getAlbums$(value.pageIndex+1)),
       map(wrap => {
         this.resultsLength = wrap.count;
 
-        return wrap.results.map(v => ({
-          id: v.id,
-          album: {name: 'Window tutorials', assets: [0, 0, 0, 0, 0, 0, 0, 0]},
-          thumbnail: v.thumbnail_video.image,
-          name: v.name,
+        return wrap.results.map(v => ({...v,
           contributor: 'Ron Amano',
           uploadDate: new Date(),
           shareCount: 220,
@@ -99,28 +74,8 @@ export class ContributorAssetsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  isRowSelected(row: AssetModel): boolean {
-    return this.selection.selected.includes(row);
+  onSidenavToggle(){
+    this.snav.toggle();
   }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-
-  handlePlayClick(url: string){
-    let w = window.open(url, '_blank');
-    if(w) {
-      w.focus();
-    }
-  }
-
 
 }

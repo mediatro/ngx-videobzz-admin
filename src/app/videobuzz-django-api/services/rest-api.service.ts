@@ -1,11 +1,11 @@
 import {Inject, Injectable} from '@angular/core';
 import {
-  RestApi, Video,
+  RestApi, Album,
   VideoCategory,
   VideoCreativeMethod,
   VideoEnvironment,
   VideoLanguage,
-  VideoValue, VideoWrap
+  VideoValue, AlbumsWrap, SeriesWrap, Video
 } from "../../admin/services/rest-api";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -31,7 +31,7 @@ export class RestApiService implements RestApi {
     @Inject('videobuzz.api.host.staging') private apiHostStag: string,
   ) { }
 
-  private get$(url: string, host: string = '', params: {[param: string]: string | string[]} = {}) {
+  private get$(url: string, params: {[param: string]: string | string[]} = {}, host: string = '') {
     return this.http.get((host || this.apiHost).concat(url), {
       params: {...params,
 
@@ -39,13 +39,10 @@ export class RestApiService implements RestApi {
     });
   }
 
-  getVideoEnvironments(): VideoEnvironment[] {
-    return [];
+  getVideoLanguagesRaw$() {
+    return this.get$('languages');
   }
 
-  getVideoLanguagesRaw$() {
-    return this.get$('languages', this.apiHostStag);
-  }
   getVideoLanguagesQuery$(){
     return query('languages', () => this.getVideoLanguagesRaw$());
   }
@@ -55,34 +52,86 @@ export class RestApiService implements RestApi {
     );
   }
 
-  getVideoValues(): VideoValue[] {
-    return [];
+  getVideoEnvironmentsRaw$() {
+    return this.get$('environments');
+  }
+  getVideoEnvironmentsQuery$(){
+    return query('environments', () => this.getVideoEnvironmentsRaw$());
+  }
+  getVideoEnvironments$(): Observable<VideoEnvironment[]> {
+    return this.getVideoEnvironmentsQuery$().pipe(
+      toAny,
+    );
   }
 
-  getVideoVideoCreativeMethods(): VideoCreativeMethod[] {
-    return [];
+  getVideoValuesRaw$() {
+    return this.get$('values');
+  }
+  getVideoValuesQuery$(){
+    return query('values', () => this.getVideoValuesRaw$());
+  }
+  getVideoValues$(): Observable<VideoValue[]> {
+    return this.getVideoValuesQuery$().pipe(
+      toAny,
+    );
   }
 
-  getVideoVideoCategoriesRaw$() {
+  getVideoCreativeMethodsRaw$() {
+    return this.get$('creative-methods');
+  }
+  getVideoCreativeMethodsQuery$(){
+    return query('creative_methods', () => this.getVideoCreativeMethodsRaw$());
+  }
+  getVideoCreativeMethods$(): Observable<VideoCreativeMethod[]> {
+    return this.getVideoCreativeMethodsQuery$().pipe(
+      toAny,
+    );
+  }
+
+  getVideoCategoriesRaw$() {
     return this.get$('categories');
   }
-  getVideoVideoCategoriesQuery$(){
-    return query('categories', () => this.getVideoVideoCategoriesRaw$());
+  getVideoCategoriesQuery$(){
+    return query('categories', () => this.getVideoCategoriesRaw$());
   }
-  getVideoVideoCategories$(): Observable<VideoCategory[]> {
-    return this.getVideoVideoCategoriesQuery$().pipe(
+  getVideoCategories$(): Observable<VideoCategory[]> {
+    return this.getVideoCategoriesQuery$().pipe(
       toAny
     );
   }
 
-  getVideoVideosRaw$(page: number) {
-    return this.get$('', '', {page: page.toString()});
+  getAlbumsRaw$(page: number) {
+    return this.get$('',{page: page.toString()});
   }
-  getVideoVideosQuery$(page: number){
-    return query('videos', () => this.getVideoVideosRaw$(page));
+  getAlbumsQuery$(page: number){
+    return query('albums', () => this.getAlbumsRaw$(page));
   }
-  getVideos$(page: number): Observable<VideoWrap> {
-    return this.getVideoVideosQuery$(page).pipe(
+  getAlbums$(page: number): Observable<AlbumsWrap> {
+    return this.getAlbumsQuery$(page).pipe(
+      toAny,
+    );
+  }
+
+  getSeriesRaw$(albumId: number) {
+    return this.get$(`${albumId}/series`);
+  }
+  getSeriesQuery$(albumId: number){
+    return query('series',[albumId], ([albumId]) => this.getSeriesRaw$(albumId));
+  }
+  getSeries$(albumId: number): Observable<SeriesWrap> {
+    return this.getSeriesQuery$(albumId).pipe(
+      toAny,
+    );
+  }
+
+  getVideoRaw$(videoId: number) {
+    return this.get$(`${videoId}`);
+  }
+  getVideoQuery$(videoId: number){
+    return query('video',[videoId], ([videoId]) => this.getVideoRaw$(videoId));
+  }
+  getVideo$(videoId: number): Observable<Video> {
+    return this.getVideoQuery$(videoId).pipe(
       toAny,
     );
   }

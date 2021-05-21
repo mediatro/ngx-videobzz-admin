@@ -2,45 +2,74 @@ import {Observable} from "rxjs";
 
 export type ApiEntity = {
   id: number;
+}
+
+export type ApiBasicEntity = ApiEntity & {
   title: string;
 }
 
-export type VideoLanguage = ApiEntity;
 
-export type VideoValue = ApiEntity;
+export type VideoLanguage = ApiBasicEntity;
 
-export type VideoEnvironment = ApiEntity;
+export type VideoValue = ApiBasicEntity;
 
-export type VideoCreativeMethod = ApiEntity;
+export type VideoEnvironment = ApiBasicEntity;
 
-export type VideoCategory = ApiEntity & {
+export type VideoCreativeMethod = ApiBasicEntity;
+
+export type VideoCategory = ApiBasicEntity & {
   sub_category: VideoSubCategory[];
 }
 
-export type VideoSubCategory = ApiEntity;
+export type VideoSubCategory = ApiBasicEntity;
 
 export type Video = ApiEntity & {
-  name: string,
-  thumbnail_video:{
-    image: string,
-    video_url: string,
-  }
+  title: string,
+  short_name: string,
+  image: string,
+  video_url: string,
 }
 
-export type VideoWrap = {
+export type Album = ApiEntity & {
+  album: string,
+  name: string,
+  videos_count: number,
+  series_count: number,
+  category: number,
+  status: string,
+
+  thumbnail_video: Video
+}
+
+export type Series = ApiEntity & {
+  short_name: string,
+  series_sign: string,
+
+  videos: Video[]
+}
+
+export type AlbumsWrap = {
   count: number,
-  results: Video[]
+  results: Album[]
+}
+
+export type SeriesWrap = {
+  records: Series[]
 }
 
 
 export interface RestApi {
 
   getVideoLanguages$(): Observable<VideoLanguage[]>;
-  getVideoValues(): VideoValue[];
-  getVideoEnvironments(): VideoEnvironment[];
-  getVideoVideoCreativeMethods(): VideoCreativeMethod[];
-  getVideoVideoCategories$(): Observable<VideoCategory[]>;
+  getVideoEnvironments$(): Observable<VideoEnvironment[]>;
+  getVideoValues$(): Observable<VideoValue[]>;
+  getVideoCreativeMethods$(): Observable<VideoCreativeMethod[]>;
 
-  getVideos$(page: number): Observable<VideoWrap>;
+  getVideoCategories$(): Observable<VideoCategory[]>;
+
+  getAlbums$(page: number): Observable<AlbumsWrap>;
+  getSeries$(albumId: number): Observable<SeriesWrap>;
+  getVideo$(videoId: number): Observable<Video>;
+
 
 }

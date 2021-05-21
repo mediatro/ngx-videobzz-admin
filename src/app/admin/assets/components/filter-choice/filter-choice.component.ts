@@ -5,9 +5,9 @@ import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/a
 import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {ApiEntity} from "../../../services/rest-api";
+import {ApiBasicEntity} from "../../../services/rest-api";
 
-type Choice = ApiEntity;
+type Choice = ApiBasicEntity;
 
 @Component({
   selector: 'app-filter-choice',

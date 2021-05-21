@@ -30,6 +30,16 @@
   </div>
   <mat-divider></mat-divider>
 
+  <h4>Direction</h4>
+  <div fxLayout="column">
+    <mat-checkbox *ngFor="let choice of directionChoices"
+                  formControlName="direction"
+    >
+      {{choice}}
+    </mat-checkbox>
+  </div>
+  <mat-divider></mat-divider>
+
   <h4>Popularity</h4>
   <div fxLayout="column">
     <mat-checkbox *ngFor="let choice of popularityChoices"
@@ -43,10 +53,10 @@
   <div fxLayout="column">
     <app-filter-choice label="Category" [allItems]="allCategories" (onChange)="handleCategoryChange($event)"></app-filter-choice>
     <app-filter-choice label="SubCategory" [allItems]="allSubCategories"></app-filter-choice>
-    <app-filter-choice label="Creative Methods"></app-filter-choice>
+    <app-filter-choice label="Creative Methods" [allItems]="allCreativeMethods"></app-filter-choice>
     <app-filter-choice label="Language" [allItems]="allLanguages"></app-filter-choice>
-    <app-filter-choice label="Environment"></app-filter-choice>
-    <app-filter-choice label="Value Symbols"></app-filter-choice>
+    <app-filter-choice label="Environment" [allItems]="allEnvironments"></app-filter-choice>
+    <app-filter-choice label="Value Symbols" [allItems]="allValues"></app-filter-choice>
     <app-filter-choice label="Soundtrack"></app-filter-choice>
   </div>
 </form>

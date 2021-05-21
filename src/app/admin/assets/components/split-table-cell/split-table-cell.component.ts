@@ -9,6 +9,7 @@ export class SplitTableCellComponent implements OnInit {
 
   @Input() upperText!: string;
   @Input() buttonText!: string;
+  @Input() buttonLink?: string;
   @Output() onClick = new EventEmitter();
 
   constructor() { }

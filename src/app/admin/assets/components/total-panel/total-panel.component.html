@@ -1,0 +1,10 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="mat-elevation-z8" [style]="{height: '100%'}">
+  <ng-container *ngFor="let item of items; let i = index">
+    <div [style]="{margin: '8px'}"
+         [matBadge]="item.badge"
+         matBadgeColor="warn"
+         matBadgeOverlap="false"
+    >{{item.content}}</div>
+    <mat-divider *ngIf="i < items.length" vertical="true" [style]="{height: '100%'}"></mat-divider>
+  </ng-container>
+</div>

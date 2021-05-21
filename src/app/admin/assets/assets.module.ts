@@ -25,6 +25,16 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MdePopoverModule} from "@material-extended/mde";
 import {MatCardModule} from "@angular/material/card";
+import { AlbumSeriesEditorComponent } from './components/album-series-editor/album-series-editor.component';
+import { TotalPanelComponent } from './components/total-panel/total-panel.component';
+import { AssetsDatagridComponent } from './components/assets-datagrid/assets-datagrid.component';
+import {AppRoutingModule} from "../../app-routing.module";
+import { SeriesDatagridComponent } from './components/series-datagrid/series-datagrid.component';
+import { NewSeriesDialogComponent } from './components/new-series-dialog/new-series-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatSelectModule} from "@angular/material/select";
+import {MatListModule} from "@angular/material/list";
 
 
 
@@ -35,7 +45,12 @@ import {MatCardModule} from "@angular/material/card";
     ContributorAssetsComponent,
       SplitTableCellComponent,
       FilterChoiceComponent,
-      FiltersPanelComponent
+      FiltersPanelComponent,
+      AlbumSeriesEditorComponent,
+      TotalPanelComponent,
+      AssetsDatagridComponent,
+      SeriesDatagridComponent,
+      NewSeriesDialogComponent
   ],
   exports: [
     ContributorAssetsComponent
@@ -59,13 +74,18 @@ import {MatCardModule} from "@angular/material/card";
     MatAutocompleteModule,
     SharedModule,
     MatDatepickerModule,
+    MatCardModule,
     MatBadgeModule,
+    MatListModule,
 
     MatMomentDateModule,
     DragDropModule,
-
     MdePopoverModule,
-    MatCardModule,
+
+    AppRoutingModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatSelectModule,
   ]
 })
 export class AssetsModule { }

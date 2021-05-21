@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Series Name</mat-label>
+    <input matInput [formControl]="control">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="handleNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="control.value" cdkFocusInitial>Ok</button>
+</div>

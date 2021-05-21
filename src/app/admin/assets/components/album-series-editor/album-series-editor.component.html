@@ -1,0 +1,21 @@
+<app-container *ngIf="series && video" cdkDropListGroup>
+  <div fxLayout="column" fxLayoutGap="8px">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <app-total-panel [items]="[
+        {content: 'Total series: '+series.length},
+        {content: 'Total videos: '+getTotalVideos()},
+      ]"></app-total-panel>
+
+      <div>
+        <h2>{{video.title}}</h2>
+      </div>
+    </div>
+
+    <app-series-datagrid *ngFor="let serie of series" [serie]="serie"></app-series-datagrid>
+
+    <div fxLayout="row">
+      <button mat-raised-button  (click)="handleAddClick()">Add Series</button>
+    </div>
+
+  </div>
+</app-container>

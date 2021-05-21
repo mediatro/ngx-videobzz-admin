@@ -1,6 +1,9 @@
 {{upperText}}
 <mat-divider></mat-divider>
 <ng-content></ng-content>
-<button color="primary" mat-button (click)="onClick.emit()">
+<button *ngIf="!buttonLink" color="primary" mat-button (click)="onClick.emit()">
   {{buttonText}}
 </button>
+<a *ngIf="buttonLink" color="primary" mat-button [routerLink]="buttonLink">
+  {{buttonText}}
+</a>

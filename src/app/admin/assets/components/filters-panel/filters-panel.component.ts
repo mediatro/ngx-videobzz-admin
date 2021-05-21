@@ -1,6 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import {ApiEntity, RestApi, VideoCategory, VideoLanguage, VideoSubCategory} from "../../../services/rest-api";
+import {
+  ApiEntity,
+  RestApi,
+  VideoCategory, VideoCreativeMethod,
+  VideoEnvironment,
+  VideoLanguage,
+  VideoSubCategory, VideoValue
+} from "../../../services/rest-api";
 import {catchError} from "rxjs/operators";
 
 @Component({
@@ -13,12 +20,17 @@ export class FiltersPanelComponent implements OnInit {
   formGroup = this.fb.group({
     quality: this.fb.control([]),
     popularity: this.fb.control([]),
+    direction: this.fb.control([]),
   });
 
   qualityChoices = ['720', '1080', '4k'];
   popularityChoices = ['Most', 'Least'];
+  directionChoices = ['Horizontal', 'Vertical'];
 
   allLanguages: VideoLanguage[] = [];
+  allEnvironments: VideoEnvironment[] = [];
+  allValues: VideoValue[] = [];
+  allCreativeMethods: VideoCreativeMethod[] = [];
   allCategories: VideoCategory[] = [];
   allSubCategories: VideoSubCategory[] = [];
 
@@ -31,8 +43,17 @@ export class FiltersPanelComponent implements OnInit {
     this.api.getVideoLanguages$().subscribe(value => {
       this.allLanguages = value;
     });
-    this.api.getVideoVideoCategories$().subscribe(value => {
+    this.api.getVideoCategories$().subscribe(value => {
       this.allCategories = value;
+    });
+    this.api.getVideoEnvironments$().subscribe(value => {
+      this.allEnvironments = value;
+    });
+    this.api.getVideoValues$().subscribe(value => {
+      this.allValues = value;
+    });
+    this.api.getVideoCreativeMethods$().subscribe(value => {
+      this.allCreativeMethods = value;
     });
   }
 

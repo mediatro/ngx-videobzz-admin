@@ -23,7 +23,7 @@ import {VideobuzzDjangoApiModule} from "./videobuzz-django-api/videobuzz-django-
     VideobuzzDjangoApiModule,
   ],
   providers: [
-    {provide: 'videobuzz.api.host', useValue: 'https://api.videobzz.com/gallery/'},
+    {provide: 'videobuzz.api.host', useValue: 'https://api-stag.videobzz.com/gallery/'},
     {provide: 'videobuzz.api.host.staging', useValue: 'https://api-stag.videobzz.com/gallery/'},
     {provide: 'admin.api.service', useClass: RestApiService}
   ],
