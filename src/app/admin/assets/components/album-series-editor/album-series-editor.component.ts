@@ -23,13 +23,13 @@ export class AlbumSeriesEditorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.params.pipe(
+    /*this.route.params.pipe(
       map(p => p['id']),
-      switchMap(value => combineLatest([this.api.getVideo$(value), this.api.getSeries$(value)])),
+      switchMap(value => combineLatest([this.api.getVideos$(value), this.api.getSeries$(value)])),
     ).subscribe(([video, series]) => {
       this.video = video;
       this.series = series.records;
-    });
+    });*/
   }
 
   getTotalVideos(): number {
@@ -39,18 +39,7 @@ export class AlbumSeriesEditorComponent implements OnInit {
   }
 
   addSeries(name: string){
-    this.series?.push({
-      id: 22,
-      short_name: name,
-      videos: [{
-        id: 22,
-        short_name: 'mock',
-        image: 'https://otziv-otziv.ru/assets/cache/images/688/6874/img_id2778094300891764459-600x600-64e.jpeg',
-        title: 'mock',
-        video_url: ''
-      }],
-      series_sign: ''
-    });
+
   }
 
   handleAddClick(){

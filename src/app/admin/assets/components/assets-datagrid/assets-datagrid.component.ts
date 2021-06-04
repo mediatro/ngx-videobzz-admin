@@ -14,17 +14,10 @@ import {MatColumnDef, MatTable, MatTableDataSource} from "@angular/material/tabl
 import {MatPaginator} from "@angular/material/paginator";
 import {PageEvent} from "@angular/material/paginator/paginator";
 import {FormBuilder, FormControl} from "@angular/forms";
+import {MatSort} from "@angular/material/sort";
+import {Sort} from "@angular/material/sort/sort";
 
-export type AssetModel = {
-  uploadDate: Date;
-  shareCount: number;
-  downloadCount: number;
-  linkCount: number;
-  play: {
-    count: number,
-    url: string,
-  };
-}
+export type AssetModel = {}
 
 export type ExtraColumn = {
     id: string,
@@ -63,6 +56,7 @@ export class AssetsDatagridComponent implements OnInit, AfterViewInit, AfterCont
 
   @Output() onToggleClick = new EventEmitter();
   @Output() onPageChange = new EventEmitter<PageEvent>();
+  @Output() onSortChange = new EventEmitter<Sort>();
 
   displayedColumns: string[] = [];
   dragEnabled = false;
@@ -70,6 +64,7 @@ export class AssetsDatagridComponent implements OnInit, AfterViewInit, AfterCont
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild(MatTable, { read: ViewContainerRef }) tableVcr!: ViewContainerRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   @ContentChild('extraColumnDefs') extraColumnDefs!: TemplateRef<any>;
   @ContentChildren(MatColumnDef) defsc!: QueryList<MatColumnDef>;
   @ViewChildren(MatColumnDef) defs!: QueryList<MatColumnDef>;
@@ -101,23 +96,24 @@ export class AssetsDatagridComponent implements OnInit, AfterViewInit, AfterCont
 
   ngAfterViewInit() {
     this.paginator.page.subscribe(this.onPageChange);
+    this.sort.sortChange.subscribe(this.onSortChange);
     this.updateDisplayedColumns();
   }
 
   updateDisplayedColumns(){
     this.displayedColumns = [
       'id',
-      'thumbnail',
+      'thumbnailVideo',
       'name',
     ].concat(
       this._beforeDisplayedColumns
     ).concat([
-      'uploadDate',
+      'updatedAt',
       'shareCount',
       'downloadCount',
       'linkCount',
-      'play',
-      'status',
+      'playCount',
+      'approvalStatus',
     ]).concat(
       this._afterDisplayedColumns
     ).concat([

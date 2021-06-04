@@ -5,9 +5,9 @@ import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/a
 import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {ApiBasicEntity} from "../../../services/rest-api";
+import {ApiNamedEntity} from "../../../services/rest-api";
 
-type Choice = ApiBasicEntity;
+type Choice = ApiNamedEntity;
 
 @Component({
   selector: 'app-filter-choice',
@@ -64,7 +64,7 @@ export class FilterChoiceComponent implements OnInit {
 
   private filter(value: string): Choice[] {
     const filterValue = value.toLowerCase();
-    return this._allItems.filter(item => item.title.toLowerCase().indexOf(filterValue) === 0 && !this.selectionContains(item));
+    return this._allItems.filter(item => item.name.toLowerCase().indexOf(filterValue) === 0 && !this.selectionContains(item));
   }
 
   private getItem(key: string): Choice | null {

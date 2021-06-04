@@ -8,6 +8,7 @@ import {SharedModule} from "./shared/shared.module";
 import {AdminModule} from "./admin/admin.module";
 import {RestApiService} from "./videobuzz-django-api/services/rest-api.service";
 import {VideobuzzDjangoApiModule} from "./videobuzz-django-api/videobuzz-django-api.module";
+import {ApiplatformOpenapiService} from "./videobzz-apiplatform/services/apiplatform-openapi.service";
 
 @NgModule({
   declarations: [
@@ -23,9 +24,9 @@ import {VideobuzzDjangoApiModule} from "./videobuzz-django-api/videobuzz-django-
     VideobuzzDjangoApiModule,
   ],
   providers: [
-    {provide: 'videobuzz.api.host', useValue: 'https://api-stag.videobzz.com/gallery/'},
-    {provide: 'videobuzz.api.host.staging', useValue: 'https://api-stag.videobzz.com/gallery/'},
-    {provide: 'admin.api.service', useClass: RestApiService}
+    {provide: 'videobzz.api.host', useValue: 'http://127.0.0.1:8000/api/'},
+    //{provide: 'videobzz.api.host', useValue: 'http://apiplatform.videobzz.com/api/'},
+    {provide: 'admin.api.service', useClass: ApiplatformOpenapiService},
   ],
   bootstrap: [AppComponent]
 })

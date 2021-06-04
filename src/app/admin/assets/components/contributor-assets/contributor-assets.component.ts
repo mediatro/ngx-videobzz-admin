@@ -12,11 +12,13 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Album, RestApi} from "../../../services/rest-api";
 import {MatPaginator} from "@angular/material/paginator";
 import {merge, Observable, Subject} from "rxjs";
-import {map, startWith, switchMap} from "rxjs/operators";
+import {debounceTime, map, startWith, switchMap} from "rxjs/operators";
 import {SelectionModel} from "@angular/cdk/collections";
 import {PageEvent} from "@angular/material/paginator/paginator";
 import {AssetModel, ExtraColumn} from "../assets-datagrid/assets-datagrid.component";
 import {MatSidenav} from "@angular/material/sidenav/sidenav";
+import {Sort} from "@angular/material/sort/sort";
+import {FormControl} from "@angular/forms";
 
 type AlbumAssetModel = AssetModel & Album & {
   contributor: string;
@@ -29,18 +31,19 @@ type AlbumAssetModel = AssetModel & Album & {
 })
 export class ContributorAssetsComponent implements OnInit, AfterViewInit {
 
-  dataSource = new MatTableDataSource<AlbumAssetModel>([]);
-  selection = new SelectionModel<AlbumAssetModel>(true, []);
+  dataSource = new MatTableDataSource<Album>([]);
+  selection = new SelectionModel<Album>(true, []);
   resultsLength = 0;
 
-  beforeDisplayedColumns = ['contributor','album'];
+  beforeDisplayedColumns = ['contributor', 'series'];
   afterDisplayedColumns = ['settings'];
 
   onPageChange = new Subject<PageEvent>();
+  onSortChange = new Subject<Sort>();
 
   @ViewChild('snav') snav!: MatSidenav;
 
-
+  searchControl = new FormControl('');
 
   constructor(
     @Inject('admin.api.service') private api: RestApi,
@@ -51,26 +54,25 @@ export class ContributorAssetsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.onPageChange.pipe(
-      startWith({pageIndex: 0}),
-      switchMap((value) => this.api.getAlbums$(value.pageIndex+1)),
-      map(wrap => {
-        this.resultsLength = wrap.count;
 
-        return wrap.results.map(v => ({...v,
-          contributor: 'Ron Amano',
-          uploadDate: new Date(),
-          shareCount: 220,
-          downloadCount: 350,
-          linkCount: 129,
-          play: {
-            count: 3754,
-            url: v.thumbnail_video.video_url
-          }
-        }))
+
+    merge(this.onPageChange, this.onSortChange, this.searchControl.valueChanges.pipe(
+      debounceTime(500),
+    )).pipe(
+      startWith({}),
+      switchMap((value: any) => {
+        return this.api.getAlbums$(
+          value.pageIndex ? value.pageIndex + 1 : 1,
+          value.active ? value : null,
+          this.searchControl.value
+        );
+      }),
+      map(wrap => {
+        this.resultsLength = wrap["hydra:totalItems"];
+        return wrap;
       }),
     ).subscribe(data => {
-      this.dataSource.data = data;
+      this.dataSource.data = data["hydra:member"];
     });
   }
 

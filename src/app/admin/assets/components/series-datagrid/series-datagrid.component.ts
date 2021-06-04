@@ -13,10 +13,10 @@ type SeriesAssetModel = AssetModel & Video;
 })
 export class SeriesDatagridComponent implements OnInit {
 
-  @Input() serie!: Series;
+  @Input() series!: Series;
 
-  dataSource = new MatTableDataSource<SeriesAssetModel>([]);
-  selection = new SelectionModel<SeriesAssetModel>(true, []);
+  dataSource = new MatTableDataSource<Video>([]);
+  selection = new SelectionModel<Video>(true, []);
   resultsLength = 0;
 
   allAlbums: Album[] = [];
@@ -28,22 +28,9 @@ export class SeriesDatagridComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.api.getAlbums$(1).subscribe(value => this.allAlbums = value.results);
-
-
-    this.dataSource.data = this.serie.videos.map(v => ({...v,
-      thumbnail_video: v,
-      uploadDate: new Date(),
-      shareCount: 220,
-      downloadCount: 350,
-      linkCount: 129,
-      play: {
-        count: 3754,
-        url: v.video_url
-      }
-    }));
-
-    this.resultsLength = this.serie.videos.length;
+    this.api.getAlbums$(1).subscribe(value => this.allAlbums = value["hydra:member"]);
+    this.dataSource.data = this.series.videos;
+    this.resultsLength = this.series.videos.length;
   }
 
 }

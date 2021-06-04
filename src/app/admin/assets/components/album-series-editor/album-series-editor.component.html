@@ -7,11 +7,11 @@
       ]"></app-total-panel>
 
       <div>
-        <h2>{{video.title}}</h2>
+        <h2>{{video.id}}</h2>
       </div>
     </div>
 
-    <app-series-datagrid *ngFor="let serie of series" [serie]="serie"></app-series-datagrid>
+    <app-series-datagrid *ngFor="let serie of series" [series]="serie"></app-series-datagrid>
 
     <div fxLayout="row">
       <button mat-raised-button  (click)="handleAddClick()">Add Series</button>

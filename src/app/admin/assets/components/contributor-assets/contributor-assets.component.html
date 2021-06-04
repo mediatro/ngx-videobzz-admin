@@ -20,7 +20,7 @@
               <mat-form-field>
                 <mat-label>Search</mat-label>
                 <mat-icon matPrefix>search</mat-icon>
-                <input type="search" matInput>
+                <input type="search" matInput [formControl]="searchControl">
               </mat-form-field>
             </form>
           </div>
@@ -39,10 +39,10 @@
                                   cellTpl: extraColumnContributor
                                 },
                                 {
-                                  id: 'album',
-                                  headerTpl: 'Album',
+                                  id: 'series',
+                                  headerTpl: 'Series',
                                   hasSort: true,
-                                  cellTpl: extraColumnAlbum
+                                  cellTpl: extraColumnSeries
                                 },
                                 {
                                   id: 'settings',
@@ -51,21 +51,22 @@
                                   cellTpl: extraColumnSettings
                                 }
                               ]"
-                             (onPageChange)="onPageChange.next"
+                             (onPageChange)="onPageChange.next($event)"
+                             (onSortChange)="onSortChange.next($event)"
                              (onToggleClick)="onSidenavToggle()"
         >
           <ng-template #extraColumnContributor let-item>
-            {{item.contributor}}
+            {{item.contributor.name}}
           </ng-template>
 
-          <ng-template #extraColumnAlbum let-item>
+          <ng-template #extraColumnSeries let-item>
             <app-split-table-cell [upperText]="item.name"
                                   buttonText="View Videos"
-                                  [buttonLink]="'../album/'+item.thumbnail_video.id"
+                                  [buttonLink]="'../album/'+item.id"
             >
-              {{item.videos_count}} videos
+              {{item.videosCount}} videos
               <mat-divider [vertical]="true" [style]="{display: 'inline'}"></mat-divider>
-              {{item.series_count}} series
+              {{item.seriesCount}} series
               <mat-divider></mat-divider>
             </app-split-table-cell>
           </ng-template>

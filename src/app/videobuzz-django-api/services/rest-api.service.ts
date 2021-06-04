@@ -1,12 +1,4 @@
 import {Inject, Injectable} from '@angular/core';
-import {
-  RestApi, Album,
-  VideoCategory,
-  VideoCreativeMethod,
-  VideoEnvironment,
-  VideoLanguage,
-  VideoValue, AlbumsWrap, SeriesWrap, Video
-} from "../../admin/services/rest-api";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {query, QueryOutput} from 'rx-query';
@@ -23,9 +15,9 @@ function toAny<T extends QueryOutput<any>>(source: Observable<T>) {
 @Injectable({
   providedIn: 'root'
 })
-export class RestApiService implements RestApi {
+export class RestApiService {
 
-  constructor(
+  /*constructor(
     private http: HttpClient,
     @Inject('videobuzz.api.host') private apiHost: string,
     @Inject('videobuzz.api.host.staging') private apiHostStag: string,
@@ -58,7 +50,7 @@ export class RestApiService implements RestApi {
   getVideoEnvironmentsQuery$(){
     return query('environments', () => this.getVideoEnvironmentsRaw$());
   }
-  getVideoEnvironments$(): Observable<VideoEnvironment[]> {
+  getSeriesEnvironments$(): Observable<SeriesEnvironment[]> {
     return this.getVideoEnvironmentsQuery$().pipe(
       toAny,
     );
@@ -70,7 +62,7 @@ export class RestApiService implements RestApi {
   getVideoValuesQuery$(){
     return query('values', () => this.getVideoValuesRaw$());
   }
-  getVideoValues$(): Observable<VideoValue[]> {
+  getSeriesSymbols$(): Observable<SeriesSymbol[]> {
     return this.getVideoValuesQuery$().pipe(
       toAny,
     );
@@ -82,7 +74,7 @@ export class RestApiService implements RestApi {
   getVideoCreativeMethodsQuery$(){
     return query('creative_methods', () => this.getVideoCreativeMethodsRaw$());
   }
-  getVideoCreativeMethods$(): Observable<VideoCreativeMethod[]> {
+  getSeriesCreativeMethods$(): Observable<SeriesCreativeMethod[]> {
     return this.getVideoCreativeMethodsQuery$().pipe(
       toAny,
     );
@@ -94,7 +86,7 @@ export class RestApiService implements RestApi {
   getVideoCategoriesQuery$(){
     return query('categories', () => this.getVideoCategoriesRaw$());
   }
-  getVideoCategories$(): Observable<VideoCategory[]> {
+  getAlbumCategories$(): Observable<AlbumCategory[]> {
     return this.getVideoCategoriesQuery$().pipe(
       toAny
     );
@@ -134,6 +126,6 @@ export class RestApiService implements RestApi {
     return this.getVideoQuery$(videoId).pipe(
       toAny,
     );
-  }
+  }*/
 
 }

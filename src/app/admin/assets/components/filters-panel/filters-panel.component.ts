@@ -3,10 +3,10 @@ import {FormBuilder} from "@angular/forms";
 import {
   ApiEntity,
   RestApi,
-  VideoCategory, VideoCreativeMethod,
-  VideoEnvironment,
+  AlbumCategory, SeriesCreativeMethod,
+  SeriesEnvironment,
   VideoLanguage,
-  VideoSubCategory, VideoValue
+  AlbumSubCategory, SeriesSymbol
 } from "../../../services/rest-api";
 import {catchError} from "rxjs/operators";
 
@@ -28,11 +28,11 @@ export class FiltersPanelComponent implements OnInit {
   directionChoices = ['Horizontal', 'Vertical'];
 
   allLanguages: VideoLanguage[] = [];
-  allEnvironments: VideoEnvironment[] = [];
-  allValues: VideoValue[] = [];
-  allCreativeMethods: VideoCreativeMethod[] = [];
-  allCategories: VideoCategory[] = [];
-  allSubCategories: VideoSubCategory[] = [];
+  allEnvironments: SeriesEnvironment[] = [];
+  allValues: SeriesSymbol[] = [];
+  allCreativeMethods: SeriesCreativeMethod[] = [];
+  allCategories: AlbumCategory[] = [];
+  allSubCategories: AlbumSubCategory[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -41,27 +41,27 @@ export class FiltersPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.getVideoLanguages$().subscribe(value => {
-      this.allLanguages = value;
+      this.allLanguages = value["hydra:member"];
     });
-    this.api.getVideoCategories$().subscribe(value => {
-      this.allCategories = value;
+    this.api.getAlbumCategories$().subscribe(value => {
+      this.allCategories = value["hydra:member"];
     });
-    this.api.getVideoEnvironments$().subscribe(value => {
-      this.allEnvironments = value;
+    this.api.getSeriesEnvironments$().subscribe(value => {
+      this.allEnvironments = value["hydra:member"];
     });
-    this.api.getVideoValues$().subscribe(value => {
-      this.allValues = value;
+    this.api.getSeriesSymbols$().subscribe(value => {
+      this.allValues = value["hydra:member"];
     });
-    this.api.getVideoCreativeMethods$().subscribe(value => {
-      this.allCreativeMethods = value;
+    this.api.getSeriesCreativeMethods$().subscribe(value => {
+      this.allCreativeMethods = value["hydra:member"];
     });
   }
 
   handleCategoryChange(selected: ApiEntity[]){
-    let ret: VideoSubCategory[] = [];
+    let ret: AlbumSubCategory[] = [];
     if(selected.length > 0){
       this.allCategories.filter(cat => selected.filter(i => i.id == cat.id).length > 0).forEach(cat => {
-        ret = ret.concat(cat.sub_category);
+        ret = ret.concat(cat.subCategories);
       });
     }
     this.allSubCategories = ret;
